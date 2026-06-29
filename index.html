@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>∫ Интеграл-Олимп</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: radial-gradient(ellipse at 50% 0%, #1a0a0a 0%, #0d0505 70%, #050202 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #f0e6d3;
+            user-select: none;
+            overflow-x: hidden;
+            transition: background 0.5s, box-shadow 0.5s;
+        }
+        body.epic-bg { background: radial-gradient(ellipse at 50% 0%, #2a1a0a 0%, #1a0a0a 50%, #0a0505 100%) !important; }
+        body.green-bg { background: radial-gradient(ellipse at 50% 0%, #0a2a1a 0%, #0d1a0d 50%, #050a05 100%) !important; }
+        body.red-bg { background: radial-gradient(ellipse at 50% 0%, #2a0a0a 0%, #1a0d0d 50%, #0a0505 100%) !important; }
+        body.shake-body { animation: shakeBody 0.6s ease-in-out; }
+        @keyframes shakeBody {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-15px); }
+            40% { transform: translateX(15px); }
+            60% { transform: translateX(-10px); }
+            80% { transform: translateX(10px); }
+        }
+        body.lose-flash { box-shadow: inset 0 0 200px rgba(220, 50, 50, 0.3); }
+        .casino {
+            max-width: 1300px;
+            width: 100%;
+            background: linear-gradient(145deg, rgba(30, 15, 10, 0.92), rgba(10, 5, 5, 0.96));
+            border-radius: 48px 48px 32px 32px;
+            padding: 28px 30px 30px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(200, 160, 80, 0.15) inset, 0 0 40px rgba(200, 120, 40, 0.08);
+            border: 1px solid rgba(200, 160, 80, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+        .starfield {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle 2s ease-in-out infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.1; transform: scale(0.8); }
+            100% { opacity: 0.6; transform: scale(1.2); }
+        }
+        .confetti-container, .particles-container, .lightning-container, .spark-container, .wave-container, .arrow-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 100;
+        }
+        .arrow-container { z-index: 95; }
+        .particles-container { z-index: 99; }
+        .lightning-container { z-index: 98; }
+        .spark-container { z-index: 97; }
+        .wave-container { z-index: 96; }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0.9;
+            border-radius: 2px;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(-20px) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg) scale(0.3); opacity: 0; }
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: particleFly linear forwards;
+        }
+        @keyframes particleFly {
+            0% { transform: translate(0,0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+        }
+        .lightning {
+            position: absolute;
+            background: rgba(255, 215, 0, 0.6);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            transform: rotate(var(--angle));
+            animation: lightningFade 0.6s ease-out forwards;
+        }
+        @keyframes lightningFade {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .gold-rain {
+            position: absolute;
+            font-size: 24px;
+            animation: goldRainFall linear forwards;
+            opacity: 0.8;
+        }
+        @keyframes goldRainFall {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+        .flash-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 200;
+            animation: flashFade 0.6s ease-out forwards;
+        }
+        @keyframes flashFade {
+            0% { opacity: 0.8; }
+            100% { opacity: 0; }
+        }
+        .spark {
+            position: absolute;
+            border-radius: 50%;
+            background: #ffd700;
+            box-shadow: 0 0 10px #ffd700;
+            animation: sparkFade 0.8s ease-out forwards;
+        }
+        @keyframes sparkFade {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        .wave-ring {
+            position: absolute;
+            border: 3px solid rgba(255, 215, 0, 0.6);
+            border-radius: 50%;
+            animation: waveExpand 1s ease-out forwards;
+        }
+        @keyframes waveExpand {
+            0% { transform: scale(0.5); opacity: 0.8; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+        .arrow-up, .arrow-down {
+            position: absolute;
+            font-size: 80px;
+            font-weight: 900;
+            z-index: 105;
+            pointer-events: none;
+            animation: arrowAnim 1.5s ease-out forwards;
+        }
+        @keyframes arrowAnim {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            30% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+            70% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+        .multiplier-popup {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            font-size: 80px;
+            font-weight: 900;
+            color: #ffd700;
+            text-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+            z-index: 300;
+            pointer-events: none;
+            opacity: 0;
+            animation: multiplierPop 1s ease-out forwards;
+        }
+        @keyframes multiplierPop {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            30% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+            70% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+        /* ─── БОЛЬШОЙ БОНУСНЫЙ ВЫИГРЫШ ─── */
+        .bonus-big-win {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 500;
+            pointer-events: none;
+            animation: bonusBigWinFade 3s ease-out forwards;
+        }
+        @keyframes bonusBigWinFade {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        .bonus-big-win .win-text {
+            font-size: 120px;
+            font-weight: 900;
+            color: #ffd700;
+            text-shadow: 0 0 60px rgba(255, 215, 0, 0.8), 0 0 120px rgba(255, 215, 0, 0.5), 0 0 200px rgba(255, 215, 0, 0.3);
+            animation: winTextPulse 0.8s ease-in-out infinite alternate;
+            background: linear-gradient(135deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.6));
+        }
+        @keyframes winTextPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+        .bonus-big-win .win-sub {
+            position: absolute;
+            bottom: 30%;
+            font-size: 40px;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            animation: winSubFade 2s ease-out forwards;
+        }
+        @keyframes winSubFade {
+            0% { opacity: 0; transform: translateY(20px); }
+            30% { opacity: 1; transform: translateY(0); }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        /* ─── HEADER ─── */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 18px;
+            border-bottom: 1px solid rgba(200, 160, 80, 0.2);
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+            gap: 12px;
+            position: relative;
+            z-index: 2;
+        }
+        .title { display: flex; align-items: center; gap: 14px; }
+        .title h1 {
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #f7e8b0, #d4a84a, #b8860b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(200, 150, 50, 0.2);
+        }
+        .title .emoji-big { font-size: 36px; -webkit-text-fill-color: initial; }
+        .balance-area { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+        .balance-box {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 24px 8px 20px;
+            border-radius: 40px;
+            border: 1px solid rgba(200, 160, 80, 0.25);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+        }
+        .balance-box .label { font-size: 14px; font-weight: 400; color: #b8a88a; letter-spacing: 0.5px; }
+        .balance-box .amount { color: #f7e8b0; min-width: 70px; text-align: right; }
+        .bet-display {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 20px;
+            border-radius: 40px;
+            border: 1px solid rgba(200, 160, 80, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+        .bet-display .label { color: #b8a88a; font-size: 13px; }
+        .bet-display .value { color: #7ec8e3; font-weight: 600; min-width: 50px; text-align: right; }
+        .game-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+            margin-bottom: 22px;
+            position: relative;
+            z-index: 2;
+        }
+        @media (max-width: 1000px) { .game-grid { grid-template-columns: 1fr; gap: 32px; } }
+        .slots-section { display: flex; flex-direction: column; align-items: center; }
+        .slots-container {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 28px;
+            padding: 20px 16px;
+            border: 2px solid rgba(200, 160, 80, 0.15);
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 18px;
+            box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s;
+            position: relative;
+        }
+        .slot-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            aspect-ratio: 5 / 3;
+        }
+        .cell {
+            background: radial-gradient(circle at 30% 30%, #1f110a, #0a0503);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            font-family: 'Times New Roman', serif;
+            color: #f7e8b0;
+            border: 2px solid rgba(200, 160, 80, 0.12);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s;
+            text-shadow: 0 0 15px rgba(200, 150, 50, 0.1);
+        }
+        .cell.negative { color: #e06060; text-shadow: 0 0 15px rgba(220, 80, 80, 0.3); }
+        .cell.highlight { border-color: #f7e8b0; box-shadow: 0 0 30px rgba(200, 150, 50, 0.4), inset 0 0 30px rgba(200, 150, 50, 0.1); transform: scale(1.02); }
+        .cell.win-cell { border-color: #7ae0a0; box-shadow: 0 0 40px rgba(120, 220, 160, 0.6); transform: scale(1.05); transition: all 0.3s; }
+        .cell.lose-cell { border-color: #e06060; box-shadow: 0 0 20px rgba(220, 80, 80, 0.3); }
+        .cell.win-blink { animation: winBlink 0.5s ease-in-out 3; }
+        @keyframes winBlink {
+            0%, 100% { box-shadow: 0 0 40px rgba(120, 220, 160, 0.6); border-color: #7ae0a0; }
+            50% { box-shadow: 0 0 80px rgba(120, 220, 160, 0.9); border-color: #b0ffd0; }
+        }
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 6px;
+        }
+        .chip-group {
+            display: flex;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 6px 12px;
+            border-radius: 40px;
+            border: 1px solid rgba(200, 160, 80, 0.12);
+        }
+        .chip-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid rgba(200, 160, 80, 0.3);
+            background: radial-gradient(circle at 30% 30%, #3d2a1a, #1a0e08);
+            color: #f7e8b0;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        }
+        .chip-btn:hover { transform: scale(1.08); border-color: #d4a84a; box-shadow: 0 0 20px rgba(200, 150, 50, 0.25); }
+        .chip-btn.active { border-color: #f7e8b0; background: radial-gradient(circle at 30% 30%, #5a3d20, #2a1508); box-shadow: 0 0 25px rgba(200, 150, 50, 0.3); }
+        .action-btn {
+            padding: 12px 36px;
+            border-radius: 60px;
+            border: none;
+            font-size: 22px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 0 6px 24px rgba(200, 50, 50, 0.4);
+            background: linear-gradient(135deg, #e03030, #a01010);
+            color: #fff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        .action-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .action-btn:hover:not(:disabled)::after { opacity: 1; }
+        .action-btn:hover:not(:disabled) { transform: scale(1.06); box-shadow: 0 8px 40px rgba(200, 50, 50, 0.6); }
+        .action-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+        .action-btn.bonus-btn {
+            background: linear-gradient(135deg, #f7e8b0, #d4a84a);
+            color: #1a0a0a;
+            text-shadow: none;
+            box-shadow: 0 6px 24px rgba(200, 150, 50, 0.3);
+            padding: 12px 28px;
+            font-size: 20px;
+        }
+        .action-btn.bonus-btn:hover:not(:disabled) { box-shadow: 0 8px 40px rgba(200, 150, 50, 0.5); }
+        .action-btn.deposit-btn {
+            background: linear-gradient(135deg, #f7e8b0, #d4a84a);
+            color: #1a0a0a;
+            text-shadow: none;
+            box-shadow: 0 6px 24px rgba(200, 150, 50, 0.3);
+            padding: 12px 28px;
+            font-size: 20px;
+        }
+        .action-btn.deposit-btn:hover:not(:disabled) { box-shadow: 0 8px 40px rgba(200, 150, 50, 0.5); }
+        .action-btn.reset-btn {
+            background: rgba(80, 60, 40, 0.5);
+            color: #b8a88a;
+            box-shadow: none;
+            padding: 10px 18px;
+            font-size: 14px;
+            border: 1px solid rgba(200, 160, 80, 0.15);
+        }
+        .action-btn.reset-btn:hover:not(:disabled) { background: rgba(80, 60, 40, 0.7); transform: scale(1.02); }
+        .bonus-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            border: 1px solid rgba(200, 160, 80, 0.15);
+            margin-top: 12px;
+            width: 100%;
+            max-width: 600px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #f7e8b0;
+            display: none;
+        }
+        .bonus-info.active { display: flex; }
+        .bonus-info .label { color: #b8a88a; font-weight: 400; }
+        .bonus-info .multiplier { color: #7ec8e3; font-size: 24px; transition: all 0.3s; }
+        .bonus-info .multiplier.big { color: #ffd700; font-size: 36px; text-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
+        .bonus-info .multiplier.negative { color: #e06060; text-shadow: 0 0 30px rgba(220, 80, 80, 0.6); }
+        .bonus-info .spins-left { color: #ffd93d; font-size: 24px; }
+        .plot-section { display: flex; flex-direction: column; }
+        .plot-container {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
+            padding: 12px;
+            border: 1px solid rgba(200, 160, 80, 0.12);
+            flex: 1;
+            min-height: 240px;
+        }
+        #plotCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 16px;
+            background: #0d0806;
+            min-height: 200px;
+        }
+        .result-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            padding: 10px 18px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
+            border: 1px solid rgba(200, 160, 80, 0.1);
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .result-display .func-label { font-size: 18px; font-weight: 600; color: #f7e8b0; font-family: 'Times New Roman', serif; font-style: italic; }
+        .result-display .integral-value { font-size: 16px; color: #7ec8e3; }
+        .result-display .payout-info { font-size: 20px; font-weight: 700; color: #7ae0a0; transition: all 0.3s; }
+        .result-display .payout-info.lose { color: #e06060; }
+        .result-display .payout-info.big-win { color: #ffd700; text-shadow: 0 0 30px rgba(255, 215, 0, 0.6); animation: bigWinPulse 0.8s ease-in-out infinite; }
+        @keyframes bigWinPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        .history {
+            margin-top: 18px;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 16px;
+            border: 1px solid rgba(200, 160, 80, 0.08);
+            max-height: 70px;
+            overflow-y: auto;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .history::-webkit-scrollbar { width: 4px; }
+        .history::-webkit-scrollbar-thumb { background: rgba(200, 160, 80, 0.3); border-radius: 4px; }
+        .history .h-item {
+            background: rgba(200, 160, 80, 0.08);
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #b8a88a;
+            border: 1px solid rgba(200, 160, 80, 0.06);
+            white-space: nowrap;
+        }
+        .history .h-item.win { border-color: rgba(120, 220, 160, 0.2); color: #7ae0a0; }
+        .history .h-item.lose { border-color: rgba(220, 100, 100, 0.2); color: #e06060; }
+        .history .h-empty { color: #5a4a3a; font-size: 14px; font-style: italic; }
+        .message {
+            margin-top: 12px;
+            text-align: center;
+            font-size: 18px;
+            min-height: 30px;
+            color: #c8b898;
+            letter-spacing: 0.3px;
+            transition: all 0.3s;
+        }
+        .message .highlight { color: #f7e8b0; font-weight: 600; }
+
+        @keyframes spinGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(200, 150, 50, 0.15); }
+            50% { box-shadow: 0 0 60px rgba(200, 150, 50, 0.5); }
+        }
+        .spin-active .cell { animation: spinGlow 0.5s ease-in-out infinite; }
+        .spin-active .slot-grid { filter: brightness(1.15); }
+
+        /* ─── SPEED CONTROL ─── */
+        .speed-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.4);
+            padding: 6px 16px;
+            border-radius: 40px;
+            border: 1px solid rgba(200,160,80,0.12);
+        }
+        .speed-control label {
+            font-size: 14px;
+            color: #b8a88a;
+            font-weight: 400;
+        }
+        .speed-control input[type="range"] {
+            width: 100px;
+            height: 4px;
+            -webkit-appearance: none;
+            background: rgba(200,160,80,0.3);
+            border-radius: 2px;
+            outline: none;
+        }
+        .speed-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f7e8b0, #d4a84a);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(200,150,50,0.3);
+        }
+        .speed-control .speed-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #f7e8b0;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .casino { padding: 16px; }
+            .title h1 { font-size: 22px; }
+            .balance-box { font-size: 18px; padding: 6px 16px; }
+            .chip-btn { width: 36px; height: 36px; font-size: 12px; }
+            .action-btn { padding: 10px 24px; font-size: 18px; }
+            .slot-grid { gap: 6px; }
+            .cell { font-size: 18px; border-radius: 10px; }
+            .result-display .func-label { font-size: 15px; }
+            .result-display .payout-info { font-size: 17px; }
+            .bonus-info { font-size: 14px; gap: 15px; }
+            .bonus-info .multiplier { font-size: 20px; }
+            .bonus-info .spins-left { font-size: 20px; }
+            .speed-control input[type="range"] { width: 60px; }
+            .bonus-big-win .win-text { font-size: 60px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="casino" id="app">
+        <!-- Starfield -->
+        <div class="starfield" id="starfield"></div>
+        <!-- Эффекты -->
+        <div class="confetti-container" id="confettiContainer"></div>
+        <div class="particles-container" id="particlesContainer"></div>
+        <div class="lightning-container" id="lightningContainer"></div>
+        <div class="spark-container" id="sparkContainer"></div>
+        <div class="wave-container" id="waveContainer"></div>
+        <div class="arrow-container" id="arrowContainer"></div>
+        <div id="flashOverlay"></div>
+
+        <header class="header">
+            <div class="title">
+                <span class="emoji-big">∫</span>
+                <h1>Интеграл-Олимп</h1>
+            </div>
+            <div class="balance-area">
+                <div class="balance-box">
+                    <span class="label">💰 Баланс</span>
+                    <span class="amount" id="balanceDisplay">1 000</span>
+                </div>
+                <div class="bet-display">
+                    <span class="label">Ставка</span>
+                    <span class="value" id="betDisplay">10</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="game-grid">
+            <section class="slots-section">
+                <div class="slots-container" id="slotsContainer">
+                    <div class="slot-grid" id="slotGrid"></div>
+                </div>
+
+                <div class="controls">
+                    <div class="chip-group" id="chipGroup">
+                        <button class="chip-btn active" data-value="5"><span class="denom">5</span></button>
+                        <button class="chip-btn" data-value="10"><span class="denom">10</span></button>
+                        <button class="chip-btn" data-value="25"><span class="denom">25</span></button>
+                        <button class="chip-btn" data-value="50"><span class="denom">50</span></button>
+                        <button class="chip-btn" data-value="100"><span class="denom">100</span></button>
+                    </div>
+                    <div class="speed-control">
+                        <label>⚡</label>
+                        <input type="range" id="speedSlider" min="1" max="5" value="3" step="1">
+                        <span class="speed-value" id="speedValue">3</span>
+                    </div>
+                    <button class="action-btn" id="spinBtn">🟥 БАБЛО</button>
+                    <button class="action-btn bonus-btn" id="bonusBtn">🎰 БОНУС (350)</button>
+                    <button class="action-btn deposit-btn" id="depositBtn" style="display:none;">➕ Додеп</button>
+                    <button class="action-btn reset-btn" id="resetBtn">↻ Сброс</button>
+                </div>
+
+                <div class="bonus-info" id="bonusInfo">
+                    <span><span class="label">Множитель X:</span> <span class="multiplier" id="bonusMultiplier">1</span></span>
+                    <span><span class="label">Осталось спинов:</span> <span class="spins-left" id="bonusSpinsLeft">0</span></span>
+                </div>
+
+                <div class="message" id="message">Нажми «БАБЛО» или «БОНУС»!</div>
+            </section>
+
+            <section class="plot-section">
+                <div class="plot-container">
+                    <canvas id="plotCanvas" width="800" height="500"></canvas>
+                </div>
+                <div class="result-display" id="resultDisplay">
+                    <span class="func-label" id="funcLabel">F(x) = ?</span>
+                    <span class="integral-value" id="integralLabel">Δ = —</span>
+                    <span class="payout-info" id="payoutLabel">Выигрыш: —</span>
+                </div>
+                <div class="history" id="historyBox">
+                    <span class="h-empty">История пуста</span>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        (() => {
+            'use strict';
+
+            // ─── СИМВОЛЫ ───
+            const FUNCTIONS = [
+                { label: 'x²', fn: (x) => x * x, tex: 'x^2', value: 2 },
+                { label: 'y²', fn: (x) => x * x, tex: 'y^2', value: 3 },
+                { label: 'x', fn: (x) => x, tex: 'x', value: 1 },
+                { label: 'cos', fn: (x) => Math.cos(x), tex: '\\cos x', value: 4 },
+                { label: 'sin', fn: (x) => Math.sin(x), tex: '\\sin x', value: 5 },
+                { label: 'ln', fn: (x) => Math.log(Math.max(0.001, x)), tex: '\\ln x', value: 6 },
+                { label: '-x', fn: (x) => -x, tex: '-x', value: -1 },
+                { label: '-y²', fn: (x) => -(x * x), tex: '-y^2', value: -3 },
+            ];
+
+            // ─── STATE ───
+            let balance = 1000;
+            let currentBet = 10;
+            let selectedChip = 10;
+            let isSpinning = false;
+            let history = [];
+            const MAX_HISTORY = 20;
+            let gridSymbols = [];
+            const ROWS = 3;
+            const COLS = 5;
+
+            let isBonus = false;
+            let bonusSpinsLeft = 0;
+            let bonusMultiplier = 1;
+            let bonusBet = 10;
+            let bonusTotalWin = 0;
+
+            // ─── SPEED ───
+            let spinSpeed = 3; // 1-5
+
+            // DOM
+            const slotGrid = document.getElementById('slotGrid');
+            const plotCanvas = document.getElementById('plotCanvas');
+            const plotCtx = plotCanvas.getContext('2d');
+            const balanceDisplay = document.getElementById('balanceDisplay');
+            const betDisplay = document.getElementById('betDisplay');
+            const messageEl = document.getElementById('message');
+            const funcLabel = document.getElementById('funcLabel');
+            const integralLabel = document.getElementById('integralLabel');
+            const payoutLabel = document.getElementById('payoutLabel');
+            const historyBox = document.getElementById('historyBox');
+            const spinBtn = document.getElementById('spinBtn');
+            const bonusBtn = document.getElementById('bonusBtn');
+            const depositBtn = document.getElementById('depositBtn');
+            const resetBtn = document.getElementById('resetBtn');
+            const chipBtns = document.querySelectorAll('.chip-btn');
+            const slotsContainer = document.getElementById('slotsContainer');
+            const confettiContainer = document.getElementById('confettiContainer');
+            const particlesContainer = document.getElementById('particlesContainer');
+            const lightningContainer = document.getElementById('lightningContainer');
+            const sparkContainer = document.getElementById('sparkContainer');
+            const waveContainer = document.getElementById('waveContainer');
+            const arrowContainer = document.getElementById('arrowContainer');
+            const flashOverlay = document.getElementById('flashOverlay');
+            const bonusInfo = document.getElementById('bonusInfo');
+            const bonusMultiplierEl = document.getElementById('bonusMultiplier');
+            const bonusSpinsLeftEl = document.getElementById('bonusSpinsLeft');
+            const starfield = document.getElementById('starfield');
+            const speedSlider = document.getElementById('speedSlider');
+            const speedValue = document.getElementById('speedValue');
+
+            // ─── STARFIELD ───
+            function createStarfield() {
+                const count = 80;
+                for (let i = 0; i < count; i++) {
+                    const star = document.createElement('div');
+                    star.className = 'star';
+                    const size = 1 + Math.random() * 3;
+                    star.style.width = size + 'px';
+                    star.style.height = size + 'px';
+                    star.style.left = Math.random() * 100 + '%';
+                    star.style.top = Math.random() * 100 + '%';
+                    star.style.animationDelay = (Math.random() * 3) + 's';
+                    star.style.animationDuration = (2 + Math.random() * 3) + 's';
+                    starfield.appendChild(star);
+                }
+            }
+            createStarfield();
+
+            // ─── SPEED CONTROL ───
+            speedSlider.addEventListener('input', () => {
+                spinSpeed = parseInt(speedSlider.value);
+                speedValue.textContent = spinSpeed;
+            });
+
+            // ─── EFFECTS ───
+
+            function createConfetti(count = 80, colorHue = null) {
+                const container = confettiContainer;
+                const colors = colorHue ? 
+                    Array.from({length: count}, () => `hsl(${colorHue + Math.random()*30}, 100%, 60%)`) :
+                    ['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#ff6bb5','#ffa94d','#a66cff','#ff8a5c'];
+                for (let i = 0; i < count; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'confetti';
+                    const size = 6 + Math.random() * 10;
+                    el.style.width = size + 'px';
+                    el.style.height = size + 'px';
+                    el.style.background = colors[Math.floor(Math.random() * colors.length)] || colors[0];
+                    el.style.left = Math.random() * 100 + '%';
+                    el.style.top = '-10px';
+                    el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                    el.style.animationDuration = (2 + Math.random() * 2) + 's';
+                    el.style.animationDelay = (Math.random() * 0.5) + 's';
+                    el.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    container.appendChild(el);
+                }
+                setTimeout(() => { container.innerHTML = ''; }, 4000);
+            }
+
+            function createParticles(positions, count = 30, colorHue = null) {
+                const container = particlesContainer;
+                const colors = colorHue ? 
+                    Array.from({length: count}, () => `hsl(${colorHue + Math.random()*30}, 100%, 60%)`) :
+                    ['#ffd700','#ff6b6b','#6bcb77','#4d96ff','#ff6bb5','#ffa94d','#a66cff','#ff8a5c'];
+                positions.forEach(pos => {
+                    for (let i = 0; i < count; i++) {
+                        const el = document.createElement('div');
+                        el.className = 'particle';
+                        const size = 4 + Math.random() * 12;
+                        el.style.width = size + 'px';
+                        el.style.height = size + 'px';
+                        el.style.background = colors[Math.floor(Math.random() * colors.length)] || colors[0];
+                        el.style.left = pos.x + 'px';
+                        el.style.top = pos.y + 'px';
+                        const angle = Math.random() * 2 * Math.PI;
+                        const dist = 100 + Math.random() * 200;
+                        const tx = Math.cos(angle) * dist;
+                        const ty = Math.sin(angle) * dist - 50;
+                        el.style.setProperty('--tx', tx + 'px');
+                        el.style.setProperty('--ty', ty + 'px');
+                        el.style.animationDuration = (0.8 + Math.random() * 0.8) + 's';
+                        el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                        container.appendChild(el);
+                    }
+                });
+                setTimeout(() => { container.innerHTML = ''; }, 2000);
+            }
+
+            function createLightning(count = 3, color = 'rgba(255,215,0,') {
+                const container = lightningContainer;
+                for (let i = 0; i < count; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'lightning';
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+                    const w = 2 + Math.random() * 4;
+                    const h = 50 + Math.random() * 150;
+                    el.style.left = x + '%';
+                    el.style.top = y + '%';
+                    el.style.width = w + 'px';
+                    el.style.height = h + 'px';
+                    el.style.setProperty('--angle', (Math.random() * 360) + 'deg');
+                    el.style.background = `${color}${0.3 + Math.random() * 0.4})`;
+                    el.style.boxShadow = `0 0 20px ${color}${0.3 + Math.random() * 0.4})`;
+                    container.appendChild(el);
+                }
+                setTimeout(() => { container.innerHTML = ''; }, 800);
+            }
+
+            function createGoldRain(count = 40, color = '#ffd700') {
+                const container = confettiContainer;
+                const symbols = ['✦', '♦', '★', '▪', '▸'];
+                for (let i = 0; i < count; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'gold-rain';
+                    el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                    el.style.left = Math.random() * 100 + '%';
+                    el.style.top = '-20px';
+                    el.style.fontSize = (16 + Math.random() * 24) + 'px';
+                    el.style.color = color;
+                    el.style.textShadow = `0 0 20px ${color}80`;
+                    el.style.animationDuration = (2 + Math.random() * 2) + 's';
+                    el.style.animationDelay = (Math.random() * 0.5) + 's';
+                    el.style.opacity = 0.6 + Math.random() * 0.4;
+                    container.appendChild(el);
+                }
+                setTimeout(() => { container.innerHTML = ''; }, 4000);
+            }
+
+            function createFlash(color = 'white') {
+                const overlay = document.createElement('div');
+                overlay.className = 'flash-overlay';
+                overlay.style.background = color;
+                overlay.style.opacity = 0.4;
+                document.querySelector('.casino').appendChild(overlay);
+                setTimeout(() => overlay.remove(), 700);
+            }
+
+            function createSparks(count = 30, colorHue = 30) {
+                const container = sparkContainer;
+                const rect = slotsContainer.getBoundingClientRect();
+                for (let i = 0; i < count; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'spark';
+                    const size = 2 + Math.random() * 6;
+                    el.style.width = size + 'px';
+                    el.style.height = size + 'px';
+                    el.style.left = (rect.left + Math.random() * rect.width) + 'px';
+                    el.style.top = (rect.top + Math.random() * rect.height) + 'px';
+                    el.style.background = `hsl(${colorHue + Math.random()*30}, 100%, 60%)`;
+                    el.style.boxShadow = `0 0 10px hsl(${colorHue + Math.random()*30}, 100%, 60%)`;
+                    el.style.animationDuration = (0.5 + Math.random() * 0.6) + 's';
+                    container.appendChild(el);
+                }
+                setTimeout(() => { container.innerHTML = ''; }, 1200);
+            }
+
+            function createWaves(centerX, centerY, count = 3, color = 'rgba(255,215,0,') {
+                const container = waveContainer;
+                for (let i = 0; i < count; i++) {
+                    const el = document.createElement('div');
+                    el.className = 'wave-ring';
+                    const size = 20 + i * 40;
+                    el.style.width = size + 'px';
+                    el.style.height = size + 'px';
+                    el.style.left = (centerX - size / 2) + 'px';
+                    el.style.top = (centerY - size / 2) + 'px';
+                    el.style.borderColor = `${color}${0.6 - i * 0.15})`;
+                    el.style.animationDelay = (i * 0.1) + 's';
+                    container.appendChild(el);
+                }
+                setTimeout(() => { container.innerHTML = ''; }, 1200);
+            }
+
+            function showArrow(direction) {
+                const container = arrowContainer;
+                const el = document.createElement('div');
+                el.className = direction === 'up' ? 'arrow-up' : 'arrow-down';
+                el.textContent = direction === 'up' ? '⬆' : '⬇';
+                el.style.left = '50%';
+                el.style.top = '40%';
+                el.style.color = direction === 'up' ? '#7ae0a0' : '#e06060';
+                el.style.textShadow = direction === 'up' ? '0 0 60px rgba(120,220,160,0.8)' : '0 0 60px rgba(220,80,80,0.8)';
+                container.appendChild(el);
+                setTimeout(() => { container.innerHTML = ''; }, 1500);
+            }
+
+            function showMultiplierPopup(text, color = '#ffd700') {
+                const popup = document.createElement('div');
+                popup.className = 'multiplier-popup';
+                popup.textContent = text;
+                popup.style.color = color;
+                popup.style.textShadow = `0 0 40px ${color}80`;
+                document.body.appendChild(popup);
+                setTimeout(() => popup.remove(), 1200);
+            }
+
+            // ─── БОЛЬШОЙ БОНУСНЫЙ ВЫИГРЫШ ───
+            function showBonusBigWin(amount) {
+                const container = document.createElement('div');
+                container.className = 'bonus-big-win';
+                container.innerHTML = `
+                    <div class="win-text">🎉 ${amount} 🎉</div>
+                    <div class="win-sub">🔥 БОНУСНЫЙ ВЫИГРЫШ! 🔥</div>
+                `;
+                document.body.appendChild(container);
+                // Эффекты
+                createConfetti(300, 45);
+                createParticles([{x: window.innerWidth/2, y: window.innerHeight/2}], 150, 45);
+                createLightning(10, 'rgba(255,215,0,');
+                createWaves(window.innerWidth/2, window.innerHeight/2, 6, 'rgba(255,215,0,');
+                createGoldRain(100, '#ffd700');
+                createFlash('#ffd700');
+                epicBackground();
+                setTimeout(() => container.remove(), 3500);
+            }
+
+            function epicBackground() {
+                document.body.classList.add('epic-bg');
+                setTimeout(() => document.body.classList.remove('epic-bg'), 2000);
+            }
+
+            function greenBackground() {
+                document.body.classList.add('green-bg');
+                setTimeout(() => document.body.classList.remove('green-bg'), 1500);
+            }
+
+            function redBackground() {
+                document.body.classList.add('red-bg');
+                setTimeout(() => document.body.classList.remove('red-bg'), 1500);
+            }
+
+            function loseEffects() {
+                document.body.classList.add('shake-body');
+                document.body.classList.add('lose-flash');
+                createFlash('#e06060');
+                setTimeout(() => {
+                    document.body.classList.remove('shake-body');
+                    document.body.classList.remove('lose-flash');
+                }, 700);
+            }
+
+            // ─── GRID ───
+            function createGrid() {
+                slotGrid.innerHTML = '';
+                for (let r = 0; r < ROWS; r++) {
+                    for (let c = 0; c < COLS; c++) {
+                        const cell = document.createElement('div');
+                        cell.className = 'cell';
+                        cell.dataset.row = r;
+                        cell.dataset.col = c;
+                        cell.textContent = '?';
+                        slotGrid.appendChild(cell);
+                    }
+                }
+                randomizeGrid();
+                renderGrid();
+            }
+
+            function randomizeGrid() {
+                gridSymbols = [];
+                for (let r = 0; r < ROWS; r++) {
+                    const row = [];
+                    for (let c = 0; c < COLS; c++) {
+                        row.push(Math.floor(Math.random() * FUNCTIONS.length));
+                    }
+                    gridSymbols.push(row);
+                }
+            }
+
+            function renderGrid() {
+                const cells = slotGrid.querySelectorAll('.cell');
+                let idx = 0;
+                for (let r = 0; r < ROWS; r++) {
+                    for (let c = 0; c < COLS; c++) {
+                        const symIdx = gridSymbols[r][c];
+                        const label = FUNCTIONS[symIdx].label;
+                        cells[idx].textContent = label;
+                        cells[idx].className = 'cell';
+                        if (label.startsWith('-')) cells[idx].classList.add('negative');
+                        idx++;
+                    }
+                }
+            }
+
+            // ─── РАСЧЁТ РОСТА/УБЫВАНИЯ ───
+            function computeGrowth(funcs, a, b) {
+                const F = (x) => {
+                    let sum = 0;
+                    for (const f of funcs) sum += f.fn(x);
+                    return sum;
+                };
+                const Fa = F(a);
+                const Fb = F(b);
+                const diff = Fb - Fa;
+                return { diff, Fa, Fb };
+            }
+
+            // ─── ОТРИСОВКА ГРАФИКА ───
+            function drawPlotWithGrowth(funcs, a, b, diff, Fa, Fb) {
+                const c = plotCtx;
+                const w = plotCanvas.width;
+                const h = plotCanvas.height;
+                const pad = { top: 30, bottom: 40, left: 50, right: 30 };
+                const plotW = w - pad.left - pad.right;
+                const plotH = h - pad.top - pad.bottom;
+
+                c.clearRect(0, 0, w, h);
+                c.fillStyle = '#0d0806';
+                c.fillRect(0, 0, w, h);
+
+                if (!funcs || funcs.length === 0) {
+                    c.fillStyle = '#5a4a3a';
+                    c.font = '22px serif';
+                    c.textAlign = 'center';
+                    c.textBaseline = 'middle';
+                    c.fillText('Сделайте ставку и крутите', w / 2, h / 2);
+                    return;
+                }
+
+                const F = (x) => {
+                    let sum = 0;
+                    for (const f of funcs) sum += f.fn(x);
+                    return sum;
+                };
+
+                const labelStr = funcs.map(f => f.label).join(' + ');
+
+                const xMin = Math.max(0, a - 0.5);
+                const xMax = b + 0.5;
+                const step = (xMax - xMin) / 300;
+                let yMin = Infinity, yMax = -Infinity;
+                const pts = [];
+                for (let x = xMin; x <= xMax; x += step) {
+                    const y = F(x);
+                    if (isFinite(y)) {
+                        if (y < yMin) yMin = y;
+                        if (y > yMax) yMax = y;
+                    }
+                    pts.push({ x, y });
+                }
+                if (!isFinite(yMin) || !isFinite(yMax)) { yMin = -1; yMax = 1; }
+                const yRange = yMax - yMin || 1;
+                const yPad = yRange * 0.15;
+                yMin -= yPad;
+                yMax += yPad;
+
+                const mapX = (x) => pad.left + ((x - xMin) / (xMax - xMin)) * plotW;
+                const mapY = (y) => pad.top + plotH - ((y - yMin) / (yMax - yMin)) * plotH;
+
+                c.strokeStyle = 'rgba(200,160,80,0.06)';
+                c.lineWidth = 0.5;
+                for (let i = 0; i <= 6; i++) {
+                    const yPos = pad.top + (i / 6) * plotH;
+                    c.beginPath();
+                    c.moveTo(pad.left, yPos);
+                    c.lineTo(w - pad.right, yPos);
+                    c.stroke();
+                }
+                for (let i = 0; i <= 8; i++) {
+                    const xPos = pad.left + (i / 8) * plotW;
+                    c.beginPath();
+                    c.moveTo(xPos, pad.top);
+                    c.lineTo(xPos, h - pad.bottom);
+                    c.stroke();
+                }
+
+                c.strokeStyle = 'rgba(200,160,80,0.2)';
+                c.lineWidth = 1;
+                const y0 = mapY(0);
+                if (y0 >= pad.top && y0 <= h - pad.bottom) {
+                    c.beginPath();
+                    c.moveTo(pad.left, y0);
+                    c.lineTo(w - pad.right, y0);
+                    c.stroke();
+                }
+                const x0 = mapX(0);
+                if (x0 >= pad.left && x0 <= w - pad.right) {
+                    c.beginPath();
+                    c.moveTo(x0, pad.top);
+                    c.lineTo(x0, h - pad.bottom);
+                    c.stroke();
+                }
+
+                c.beginPath();
+                let first = true;
+                for (const p of pts) {
+                    if (!isFinite(p.y)) { first = true; continue; }
+                    const px = mapX(p.x);
+                    const py = mapY(p.y);
+                    if (first) { c.moveTo(px, py); first = false; } else c.lineTo(px, py);
+                }
+                c.strokeStyle = '#f7e8b0';
+                c.lineWidth = 2.5;
+                c.shadowColor = 'rgba(200,160,80,0.2)';
+                c.shadowBlur = 10;
+                c.stroke();
+                c.shadowBlur = 0;
+
+                const drawPoint = (x, color, label) => {
+                    const px = mapX(x);
+                    const py = mapY(F(x));
+                    c.beginPath();
+                    c.arc(px, py, 6, 0, 2*Math.PI);
+                    c.fillStyle = color;
+                    c.shadowColor = color;
+                    c.shadowBlur = 15;
+                    c.fill();
+                    c.shadowBlur = 0;
+                    c.fillStyle = color;
+                    c.font = '14px sans-serif';
+                    c.textAlign = 'center';
+                    c.textBaseline = 'bottom';
+                    c.fillText(label, px, py - 10);
+                };
+                drawPoint(a, '#7ec8e3', 'a');
+                drawPoint(b, '#7ec8e3', 'b');
+
+                const pa = { x: mapX(a), y: mapY(F(a)) };
+                const pb = { x: mapX(b), y: mapY(F(b)) };
+                c.beginPath();
+                c.moveTo(pa.x, pa.y);
+                c.lineTo(pb.x, pb.y);
+                c.strokeStyle = diff > 0 ? '#7ae0a0' : (diff < 0 ? '#e06060' : '#f7e8b0');
+                c.lineWidth = 2;
+                c.setLineDash([6, 4]);
+                c.stroke();
+                c.setLineDash([]);
+
+                c.fillStyle = '#7ec8e3';
+                c.font = '16px "Times New Roman", serif';
+                c.textAlign = 'right';
+                c.textBaseline = 'top';
+                const diffStr = `Δ = F(b)-F(a) = ${diff.toFixed(4)}`;
+                c.fillText(diffStr, w - pad.right - 4, pad.top + 4);
+
+                c.fillStyle = '#f7e8b0';
+                c.font = '20px "Times New Roman", serif';
+                c.textAlign = 'left';
+                c.textBaseline = 'top';
+                c.fillText(`F(x) = ${labelStr}`, pad.left + 4, pad.top + 4);
+            }
+
+            // ─── СПИН ───
+            function performSpin() {
+                if (isSpinning || isBonus) return;
+                const betAmt = currentBet;
+                if (betAmt > balance) {
+                    setMessage('❌ Недостаточно средств!', '#e06060');
+                    return;
+                }
+
+                balance -= betAmt;
+                updateBalance();
+
+                isSpinning = true;
+                spinBtn.disabled = true;
+                bonusBtn.disabled = true;
+                setMessage('🎡 Вращение...', '#c8b898');
+                slotsContainer.classList.add('spin-active');
+
+                // Искры во время вращения
+                const sparkInterval = setInterval(() => {
+                    createSparks(10, 30);
+                }, 300);
+
+                const cells = slotGrid.querySelectorAll('.cell');
+                let interval = setInterval(() => {
+                    for (let i = 0; i < cells.length; i++) {
+                        const randIdx = Math.floor(Math.random() * FUNCTIONS.length);
+                        const label = FUNCTIONS[randIdx].label;
+                        cells[i].textContent = label;
+                        cells[i].className = 'cell';
+                        if (label.startsWith('-')) cells[i].classList.add('negative');
+                    }
+                }, 70);
+
+                // Скорость вращения влияет на длительность
+                const baseDuration = 1500;
+                const speedFactor = 1 + (5 - spinSpeed) * 0.2; // 1.8 при speed=1, 1.0 при speed=5
+                const duration = baseDuration * speedFactor + Math.random() * 500;
+
+                setTimeout(() => {
+                    clearInterval(interval);
+                    clearInterval(sparkInterval);
+                    sparkContainer.innerHTML = '';
+
+                    const finalGrid = [];
+                    for (let r = 0; r < ROWS; r++) {
+                        const row = [];
+                        for (let c = 0; c < COLS; c++) {
+                            row.push(Math.floor(Math.random() * FUNCTIONS.length));
+                        }
+                        finalGrid.push(row);
+                    }
+                    gridSymbols = finalGrid;
+                    renderGrid();
+
+                    const funcs = [];
+                    for (let r = 0; r < ROWS; r++) {
+                        for (let c = 0; c < COLS; c++) {
+                            const idx = finalGrid[r][c];
+                            funcs.push(FUNCTIONS[idx]);
+                        }
+                    }
+
+                    const a = Math.random() * 3.5;
+                    const b = a + 0.5 + Math.random() * 2.5;
+                    const growth = computeGrowth(funcs, a, b);
+                    const diff = growth.diff;
+
+                    let winAmount = 0;
+                    let isWin = false;
+                    let resultMessage = '';
+                    let resultColor = '#c8b898';
+
+                    if (diff > 0) {
+                        const multiplier = Math.min(1 + diff, 10);
+                        winAmount = Math.round(betAmt * multiplier);
+                        balance += winAmount;
+                        isWin = true;
+                        resultMessage = `📈 Рост! +${winAmount}`;
+                        resultColor = '#7ae0a0';
+                        greenBackground();
+                        createConfetti(120, 120);
+                        createParticles([{x: window.innerWidth/2, y: window.innerHeight/2}], 50, 120);
+                        createLightning(4, 'rgba(120,220,160,');
+                        createWaves(window.innerWidth/2, window.innerHeight/2, 4, 'rgba(120,220,160,');
+                        createGoldRain(40, '#7ae0a0');
+                        showArrow('up');
+                        createFlash('#7ae0a0');
+                        if (winAmount > betAmt * 3) {
+                            payoutLabel.classList.add('big-win');
+                            setTimeout(() => payoutLabel.classList.remove('big-win'), 3000);
+                            epicBackground();
+                            createConfetti(200, 120);
+                            showMultiplierPopup(`+${winAmount}`, '#7ae0a0');
+                        }
+                    } else if (diff < 0) {
+                        winAmount = 0;
+                        isWin = false;
+                        resultMessage = `📉 Убывание! -${betAmt}`;
+                        resultColor = '#e06060';
+                        redBackground();
+                        createSparks(40, 0);
+                        createParticles([{x: window.innerWidth/2, y: window.innerHeight/2}], 40, 0);
+                        createLightning(3, 'rgba(220,80,80,');
+                        createWaves(window.innerWidth/2, window.innerHeight/2, 3, 'rgba(220,80,80,');
+                        createGoldRain(30, '#e06060');
+                        showArrow('down');
+                        createFlash('#e06060');
+                        loseEffects();
+                    } else {
+                        balance += betAmt;
+                        winAmount = 0;
+                        isWin = false;
+                        resultMessage = `⚖️ Нейтрально (ставка возвращена)`;
+                        resultColor = '#f7e8b0';
+                        createFlash('#ffd700');
+                        createGoldRain(30, '#ffd700');
+                        createWaves(window.innerWidth/2, window.innerHeight/2, 2, 'rgba(255,215,0,');
+                    }
+
+                    updateBalance();
+                    setMessage(resultMessage, resultColor);
+
+                    const uniqueFuncs = [];
+                    const seen = new Set();
+                    for (const f of funcs) {
+                        if (!seen.has(f.label)) {
+                            seen.add(f.label);
+                            uniqueFuncs.push(f);
+                        }
+                    }
+                    drawPlotWithGrowth(uniqueFuncs, a, b, diff, growth.Fa, growth.Fb);
+                    const labelStr = uniqueFuncs.map(f => f.label).join(' + ');
+                    funcLabel.textContent = `F(x) = ${labelStr}`;
+                    integralLabel.textContent = `Δ = ${diff.toFixed(4)}`;
+                    if (isWin) {
+                        payoutLabel.textContent = `🏆 +${winAmount}`;
+                        payoutLabel.className = 'payout-info';
+                    } else if (diff === 0) {
+                        payoutLabel.textContent = `↩️ 0`;
+                        payoutLabel.className = 'payout-info';
+                    } else {
+                        payoutLabel.textContent = `—`;
+                        payoutLabel.className = 'payout-info lose';
+                    }
+
+                    addHistory(labelStr, diff, winAmount, isWin || diff === 0);
+
+                    isSpinning = false;
+                    spinBtn.disabled = false;
+                    bonusBtn.disabled = false;
+                    slotsContainer.classList.remove('spin-active');
+                    checkBalance();
+                }, duration);
+            }
+
+            // ─── БОНУС (с большим выводом выигрыша) ───
+            function checkBonusWin(grid) {
+                let hasFour = false;
+                for (let r = 0; r < ROWS; r++) {
+                    const row = grid[r];
+                    const counts = {};
+                    for (let c = 0; c < COLS; c++) {
+                        const val = row[c];
+                        counts[val] = (counts[val] || 0) + 1;
+                    }
+                    for (const count of Object.values(counts)) {
+                        if (count >= 4) hasFour = true;
+                    }
+                }
+                for (let c = 0; c < COLS; c++) {
+                    const col = [];
+                    for (let r = 0; r < ROWS; r++) {
+                        col.push(grid[r][c]);
+                    }
+                    const counts = {};
+                    for (let r = 0; r < ROWS; r++) {
+                        const val = col[r];
+                        counts[val] = (counts[val] || 0) + 1;
+                    }
+                    for (const count of Object.values(counts)) {
+                        if (count === 3) hasFour = true;
+                    }
+                }
+                return hasFour;
+            }
+
+            function startBonus() {
+                if (isSpinning || isBonus) return;
+                if (balance < 350) {
+                    setMessage('❌ Недостаточно средств для бонуса (нужно 350)!', '#e06060');
+                    return;
+                }
+
+                balance -= 350;
+                updateBalance();
+
+                isBonus = true;
+                bonusSpinsLeft = 10;
+                bonusMultiplier = 1;
+                bonusTotalWin = 0;
+                bonusBet = currentBet;
+
+                spinBtn.disabled = true;
+                bonusBtn.disabled = true;
+                depositBtn.style.display = 'none';
+                setMessage('🎰 Бонус активирован! Стартовый спин...', '#f7e8b0');
+
+                bonusInfo.classList.add('active');
+                bonusMultiplierEl.textContent = '1';
+                bonusSpinsLeftEl.textContent = '10';
+
+                createGoldRain(80, '#ffd700');
+                createLightning(4);
+                createFlash('#ffd700');
+                epicBackground();
+                startBonusInitialSpin();
+            }
+
+            function startBonusInitialSpin() {
+                const syms = [];
+                for (let i = 0; i < 3; i++) {
+                    syms.push(Math.floor(Math.random() * FUNCTIONS.length));
+                }
+                const labels = syms.map(idx => FUNCTIONS[idx].label);
+                setMessage(`🎲 Стартовые символы: ${labels.join(' · ')}`, '#f7e8b0');
+
+                let sum = 0;
+                for (const idx of syms) {
+                    sum += FUNCTIONS[idx].value;
+                }
+                bonusMultiplier = sum;
+                bonusMultiplierEl.textContent = bonusMultiplier;
+                if (bonusMultiplier < 0) {
+                    bonusMultiplierEl.classList.add('negative');
+                } else {
+                    bonusMultiplierEl.classList.remove('negative');
+                }
+                showMultiplierPopup(`X = ${bonusMultiplier}`, bonusMultiplier < 0 ? '#e06060' : '#ffd700');
+
+                setTimeout(() => {
+                    setMessage(`🎰 Бонус: ${bonusSpinsLeft} спинов, X=${bonusMultiplier}`, '#7ec8e3');
+                    doBonusSpin();
+                }, 1500);
+            }
+
+            function doBonusSpin() {
+                if (bonusSpinsLeft <= 0) {
+                    finishBonus();
+                    return;
+                }
+
+                const finalGrid = [];
+                for (let r = 0; r < ROWS; r++) {
+                    const row = [];
+                    for (let c = 0; c < COLS; c++) {
+                        row.push(Math.floor(Math.random() * FUNCTIONS.length));
+                    }
+                    finalGrid.push(row);
+                }
+                gridSymbols = finalGrid;
+                renderGrid();
+
+                const hasFour = checkBonusWin(finalGrid);
+                let winAmount = 0;
+                let isWin = false;
+                const cellsAll = slotGrid.querySelectorAll('.cell');
+
+                if (hasFour) {
+                    bonusMultiplier *= 2;
+                    winAmount = Math.round(bonusMultiplier * bonusBet);
+                    if (winAmount < 0) {
+                        balance += winAmount;
+                        isWin = false;
+                        bonusTotalWin += winAmount;
+                        cellsAll.forEach(cell => cell.classList.add('lose-cell'));
+                        setTimeout(() => {
+                            cellsAll.forEach(cell => cell.classList.remove('lose-cell'));
+                        }, 800);
+                        setMessage(`💀 Сыгровка, но X отрицательный! -${Math.abs(winAmount)} 🪙`, '#e06060');
+                        loseEffects();
+                        createLightning(3, 'rgba(220,80,80,');
+                        createGoldRain(30, '#e06060');
+                    } else {
+                        balance += winAmount;
+                        isWin = true;
+                        bonusTotalWin += winAmount;
+                        cellsAll.forEach(cell => cell.classList.add('win-cell', 'win-blink'));
+                        createConfetti(200, 45);
+                        createFlash('#ffd700');
+                        createLightning(8);
+                        createWaves(window.innerWidth/2, window.innerHeight/2, 5);
+                        epicBackground();
+                        createParticles([{x: window.innerWidth/2, y: window.innerHeight/2}], 100, 45);
+                        createGoldRain(80, '#ffd700');
+                        setMessage(`🔥 Сыгровка! X=${bonusMultiplier}, +${winAmount} 🪙`, '#ffd700');
+                        // БОЛЬШОЙ ВЫВОД ВЫИГРЫША
+                        if (winAmount > 100) {
+                            showBonusBigWin(`+${winAmount}`);
+                        } else {
+                            showMultiplierPopup(`+${winAmount}`, '#ffd700');
+                        }
+                    }
+                    bonusMultiplierEl.textContent = bonusMultiplier;
+                    if (bonusMultiplier < 0) {
+                        bonusMultiplierEl.classList.add('negative');
+                    } else {
+                        bonusMultiplierEl.classList.remove('negative');
+                        bonusMultiplierEl.classList.add('big');
+                        setTimeout(() => bonusMultiplierEl.classList.remove('big'), 1000);
+                    }
+                } else {
+                    cellsAll.forEach(cell => cell.classList.add('lose-cell'));
+                    setTimeout(() => {
+                        cellsAll.forEach(cell => cell.classList.remove('lose-cell'));
+                    }, 800);
+                    setMessage(`😔 Бонусный спин без сыгровки`, '#c8b898');
+                    loseEffects();
+                }
+
+                updateBalance();
+
+                bonusSpinsLeft--;
+                bonusSpinsLeftEl.textContent = bonusSpinsLeft;
+
+                const funcs = [];
+                for (let r = 0; r < ROWS; r++) {
+                    for (let c = 0; c < COLS; c++) {
+                        const idx = finalGrid[r][c];
+                        funcs.push(FUNCTIONS[idx]);
+                    }
+                }
+                const uniqueFuncs = [];
+                const seen = new Set();
+                for (const f of funcs) {
+                    if (!seen.has(f.label)) {
+                        seen.add(f.label);
+                        uniqueFuncs.push(f);
+                    }
+                }
+                const a = Math.random() * 3.5;
+                const b = a + 0.5 + Math.random() * 2.5;
+                const growth = computeGrowth(uniqueFuncs, a, b);
+                const diff = growth.diff;
+                drawPlotWithGrowth(uniqueFuncs, a, b, diff, growth.Fa, growth.Fb);
+                const labelStr = uniqueFuncs.map(f => f.label).join(' + ');
+                funcLabel.textContent = `F(x) = ${labelStr}`;
+                integralLabel.textContent = `Δ = ${diff.toFixed(4)}`;
+                if (isWin && winAmount > 0) {
+                    payoutLabel.textContent = `🏆 +${winAmount}`;
+                    payoutLabel.className = 'payout-info';
+                } else if (isWin && winAmount < 0) {
+                    payoutLabel.textContent = `💀 -${Math.abs(winAmount)}`;
+                    payoutLabel.className = 'payout-info lose';
+                } else {
+                    payoutLabel.textContent = '—';
+                    payoutLabel.className = 'payout-info lose';
+                }
+                addHistory(`[БОНУС] ${labelStr}`, diff, winAmount, isWin && winAmount > 0);
+
+                if (bonusSpinsLeft > 0) {
+                    setTimeout(() => {
+                        doBonusSpin();
+                    }, 1500);
+                } else {
+                    finishBonus();
+                }
+            }
+
+            function finishBonus() {
+                setMessage(`🎉 Бонус завершён! Общий выигрыш: +${bonusTotalWin} 🪙`, '#ffd700');
+                bonusInfo.classList.remove('active');
+                isBonus = false;
+                spinBtn.disabled = false;
+                bonusBtn.disabled = false;
+                checkBalance();
+                if (bonusTotalWin > 0) {
+                    createConfetti(200, 45);
+                    createFlash('#ffd700');
+                    createLightning(8);
+                    createGoldRain(80, '#ffd700');
+                    epicBackground();
+                    payoutLabel.textContent = `🏆 БОНУС +${bonusTotalWin}`;
+                    payoutLabel.className = 'payout-info big-win';
+                    setTimeout(() => payoutLabel.classList.remove('big-win'), 4000);
+                    if (bonusTotalWin > 100) {
+                        showBonusBigWin(`+${bonusTotalWin}`);
+                    }
+                } else if (bonusTotalWin < 0) {
+                    payoutLabel.textContent = `💀 БОНУС -${Math.abs(bonusTotalWin)}`;
+                    payoutLabel.className = 'payout-info lose';
+                }
+                bonusSpinsLeft = 0;
+                bonusMultiplier = 1;
+                bonusTotalWin = 0;
+                bonusMultiplierEl.textContent = '1';
+                bonusMultiplierEl.classList.remove('negative', 'big');
+            }
+
+            // ─── UI HELPERS ───
+            function updateBalance() {
+                balanceDisplay.textContent = Math.round(balance).toLocaleString();
+                betDisplay.textContent = currentBet;
+            }
+
+            function setMessage(msg, color = '#c8b898') {
+                messageEl.innerHTML = msg;
+                messageEl.style.color = color;
+            }
+
+            function addHistory(funcLabel, diff, winAmount, isWin) {
+                const entry = {
+                    func: funcLabel,
+                    diff: diff.toFixed(3),
+                    win: winAmount,
+                    isWin
+                };
+                history.unshift(entry);
+                if (history.length > MAX_HISTORY) history.pop();
+                renderHistory();
+            }
+
+            function renderHistory() {
+                if (history.length === 0) {
+                    historyBox.innerHTML = '<span class="h-empty">История пуста</span>';
+                    return;
+                }
+                historyBox.innerHTML = history.map((h) =>
+                    `<span class="h-item ${h.isWin ? 'win' : 'lose'}">${h.func}  Δ=${h.diff}  ${h.isWin ? '✅ +'+h.win : '❌'}</span>`
+                ).join('');
+            }
+
+            function selectChip(value) {
+                if (isSpinning || isBonus) return;
+                selectedChip = value;
+                currentBet = value;
+                chipBtns.forEach((btn) => {
+                    btn.classList.toggle('active', parseInt(btn.dataset.value) === value);
+                });
+                betDisplay.textContent = currentBet;
+            }
+
+            function checkBalance() {
+                if (balance <= 0) {
+                    depositBtn.style.display = 'inline-block';
+                    spinBtn.disabled = true;
+                    bonusBtn.disabled = true;
+                    setMessage('💰 Баланс нулевой. Пополните (Додеп)!', '#f7e8b0');
+                } else {
+                    depositBtn.style.display = 'none';
+                    spinBtn.disabled = false;
+                    bonusBtn.disabled = false;
+                }
+                if (isBonus) {
+                    spinBtn.disabled = true;
+                    bonusBtn.disabled = true;
+                }
+            }
+
+            function deposit() {
+                balance += 1000;
+                updateBalance();
+                checkBalance();
+                setMessage('💳 Пополнение на 1000 🪙', '#7ae0a0');
+                if (balance > 0) {
+                    depositBtn.style.display = 'none';
+                    spinBtn.disabled = false;
+                    bonusBtn.disabled = false;
+                }
+                if (isBonus) {
+                    spinBtn.disabled = true;
+                    bonusBtn.disabled = true;
+                }
+            }
+
+            function resetGame() {
+                if (isSpinning || isBonus) return;
+                balance = 1000;
+                history = [];
+                randomizeGrid();
+                renderGrid();
+                updateBalance();
+                drawPlotWithGrowth([], 0, 0, 0, 0, 0);
+                funcLabel.textContent = 'F(x) = ?';
+                integralLabel.textContent = 'Δ = —';
+                payoutLabel.textContent = 'Выигрыш: —';
+                payoutLabel.className = 'payout-info';
+                renderHistory();
+                setMessage('🔄 Игра сброшена. Крутите!', '#c8b898');
+                spinBtn.disabled = false;
+                bonusBtn.disabled = false;
+                depositBtn.style.display = 'none';
+                bonusInfo.classList.remove('active');
+                bonusMultiplier = 1;
+                bonusSpinsLeft = 0;
+                isBonus = false;
+                checkBalance();
+                confettiContainer.innerHTML = '';
+                particlesContainer.innerHTML = '';
+                lightningContainer.innerHTML = '';
+                sparkContainer.innerHTML = '';
+                waveContainer.innerHTML = '';
+                arrowContainer.innerHTML = '';
+            }
+
+            // ─── INIT ───
+            function init() {
+                createGrid();
+                drawPlotWithGrowth([], 0, 0, 0, 0, 0);
+                updateBalance();
+                renderHistory();
+                setMessage('🎰 Нажми «БАБЛО» или «БОНУС»!', '#c8b898');
+                checkBalance();
+
+                chipBtns.forEach((btn) => {
+                    btn.addEventListener('click', () => {
+                        const val = parseInt(btn.dataset.value);
+                        selectChip(val);
+                    });
+                });
+
+                spinBtn.addEventListener('click', performSpin);
+                bonusBtn.addEventListener('click', startBonus);
+                depositBtn.addEventListener('click', deposit);
+                resetBtn.addEventListener('click', resetGame);
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === ' ' || e.key === 'Enter') {
+                        e.preventDefault();
+                        if (!isSpinning && !isBonus) performSpin();
+                    }
+                });
+
+                selectChip(10);
+            }
+
+            document.addEventListener('DOMContentLoaded', init);
+        })();
+    </script>
+</body>
+</html>
