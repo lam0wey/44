@@ -185,56 +185,6 @@
             70% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
             100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
         }
-        /* ─── БОЛЬШОЙ БОНУСНЫЙ ВЫИГРЫШ ─── */
-        .bonus-big-win {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 500;
-            pointer-events: none;
-            animation: bonusBigWinFade 3s ease-out forwards;
-        }
-        @keyframes bonusBigWinFade {
-            0% { opacity: 0; }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-        .bonus-big-win .win-text {
-            font-size: 120px;
-            font-weight: 900;
-            color: #ffd700;
-            text-shadow: 0 0 60px rgba(255, 215, 0, 0.8), 0 0 120px rgba(255, 215, 0, 0.5), 0 0 200px rgba(255, 215, 0, 0.3);
-            animation: winTextPulse 0.8s ease-in-out infinite alternate;
-            background: linear-gradient(135deg, #ffd700, #ff8c00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.6));
-        }
-        @keyframes winTextPulse {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.05); }
-        }
-        .bonus-big-win .win-sub {
-            position: absolute;
-            bottom: 30%;
-            font-size: 40px;
-            color: #fff;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-            animation: winSubFade 2s ease-out forwards;
-        }
-        @keyframes winSubFade {
-            0% { opacity: 0; transform: translateY(20px); }
-            30% { opacity: 1; transform: translateY(0); }
-            80% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-        /* ─── HEADER ─── */
         .header {
             display: flex;
             justify-content: space-between;
@@ -342,7 +292,7 @@
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 14px;
+            gap: 10px;
             width: 100%;
             max-width: 600px;
             margin-top: 6px;
@@ -374,14 +324,14 @@
         .chip-btn:hover { transform: scale(1.08); border-color: #d4a84a; box-shadow: 0 0 20px rgba(200, 150, 50, 0.25); }
         .chip-btn.active { border-color: #f7e8b0; background: radial-gradient(circle at 30% 30%, #5a3d20, #2a1508); box-shadow: 0 0 25px rgba(200, 150, 50, 0.3); }
         .action-btn {
-            padding: 12px 36px;
+            padding: 12px 24px;
             border-radius: 60px;
             border: none;
-            font-size: 22px;
+            font-size: 18px;
             font-weight: 800;
             cursor: pointer;
             transition: all 0.2s;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
             box-shadow: 0 6px 24px rgba(200, 50, 50, 0.4);
             background: linear-gradient(135deg, #e03030, #a01010);
@@ -389,6 +339,7 @@
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
             position: relative;
             overflow: hidden;
+            white-space: nowrap;
         }
         .action-btn::after {
             content: '';
@@ -409,24 +360,29 @@
             color: #1a0a0a;
             text-shadow: none;
             box-shadow: 0 6px 24px rgba(200, 150, 50, 0.3);
-            padding: 12px 28px;
-            font-size: 20px;
         }
         .action-btn.bonus-btn:hover:not(:disabled) { box-shadow: 0 8px 40px rgba(200, 150, 50, 0.5); }
+        .action-btn.allin-btn {
+            background: linear-gradient(135deg, #ff6b35, #c0392b);
+            color: #fff;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 6px 24px rgba(255, 107, 53, 0.4);
+            font-size: 16px;
+            padding: 12px 18px;
+        }
+        .action-btn.allin-btn:hover:not(:disabled) { box-shadow: 0 8px 40px rgba(255, 107, 53, 0.6); }
         .action-btn.deposit-btn {
             background: linear-gradient(135deg, #f7e8b0, #d4a84a);
             color: #1a0a0a;
             text-shadow: none;
             box-shadow: 0 6px 24px rgba(200, 150, 50, 0.3);
-            padding: 12px 28px;
-            font-size: 20px;
         }
         .action-btn.deposit-btn:hover:not(:disabled) { box-shadow: 0 8px 40px rgba(200, 150, 50, 0.5); }
         .action-btn.reset-btn {
             background: rgba(80, 60, 40, 0.5);
             color: #b8a88a;
             box-shadow: none;
-            padding: 10px 18px;
+            padding: 10px 16px;
             font-size: 14px;
             border: 1px solid rgba(200, 160, 80, 0.15);
         }
@@ -534,52 +490,12 @@
         .spin-active .cell { animation: spinGlow 0.5s ease-in-out infinite; }
         .spin-active .slot-grid { filter: brightness(1.15); }
 
-        /* ─── SPEED CONTROL ─── */
-        .speed-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(0,0,0,0.4);
-            padding: 6px 16px;
-            border-radius: 40px;
-            border: 1px solid rgba(200,160,80,0.12);
-        }
-        .speed-control label {
-            font-size: 14px;
-            color: #b8a88a;
-            font-weight: 400;
-        }
-        .speed-control input[type="range"] {
-            width: 100px;
-            height: 4px;
-            -webkit-appearance: none;
-            background: rgba(200,160,80,0.3);
-            border-radius: 2px;
-            outline: none;
-        }
-        .speed-control input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #f7e8b0, #d4a84a);
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(200,150,50,0.3);
-        }
-        .speed-control .speed-value {
-            font-size: 14px;
-            font-weight: 600;
-            color: #f7e8b0;
-            min-width: 30px;
-            text-align: center;
-        }
-
         @media (max-width: 600px) {
             .casino { padding: 16px; }
             .title h1 { font-size: 22px; }
             .balance-box { font-size: 18px; padding: 6px 16px; }
             .chip-btn { width: 36px; height: 36px; font-size: 12px; }
-            .action-btn { padding: 10px 24px; font-size: 18px; }
+            .action-btn { padding: 8px 14px; font-size: 14px; }
             .slot-grid { gap: 6px; }
             .cell { font-size: 18px; border-radius: 10px; }
             .result-display .func-label { font-size: 15px; }
@@ -587,8 +503,8 @@
             .bonus-info { font-size: 14px; gap: 15px; }
             .bonus-info .multiplier { font-size: 20px; }
             .bonus-info .spins-left { font-size: 20px; }
-            .speed-control input[type="range"] { width: 60px; }
-            .bonus-big-win .win-text { font-size: 60px; }
+            .controls { gap: 6px; }
+            .action-btn.allin-btn { font-size: 12px; padding: 8px 12px; }
         }
     </style>
 </head>
@@ -636,12 +552,8 @@
                         <button class="chip-btn" data-value="50"><span class="denom">50</span></button>
                         <button class="chip-btn" data-value="100"><span class="denom">100</span></button>
                     </div>
-                    <div class="speed-control">
-                        <label>⚡</label>
-                        <input type="range" id="speedSlider" min="1" max="5" value="3" step="1">
-                        <span class="speed-value" id="speedValue">3</span>
-                    </div>
                     <button class="action-btn" id="spinBtn">🟥 БАБЛО</button>
+                    <button class="action-btn allin-btn" id="allinBtn">⚡ ALL IN</button>
                     <button class="action-btn bonus-btn" id="bonusBtn">🎰 БОНУС (350)</button>
                     <button class="action-btn deposit-btn" id="depositBtn" style="display:none;">➕ Додеп</button>
                     <button class="action-btn reset-btn" id="resetBtn">↻ Сброс</button>
@@ -675,7 +587,7 @@
         (() => {
             'use strict';
 
-            // ─── СИМВОЛЫ ───
+            // ─── СИМВОЛЫ И ВЕСА ───
             const FUNCTIONS = [
                 { label: 'x²', fn: (x) => x * x, tex: 'x^2', value: 2 },
                 { label: 'y²', fn: (x) => x * x, tex: 'y^2', value: 3 },
@@ -686,6 +598,18 @@
                 { label: '-x', fn: (x) => -x, tex: '-x', value: -1 },
                 { label: '-y²', fn: (x) => -(x * x), tex: '-y^2', value: -3 },
             ];
+
+            const WEIGHTS = [1, 1, 1, 1, 1, 1, 3, 3];
+
+            function weightedRandom() {
+                const total = WEIGHTS.reduce((a, b) => a + b, 0);
+                let r = Math.random() * total;
+                for (let i = 0; i < WEIGHTS.length; i++) {
+                    r -= WEIGHTS[i];
+                    if (r <= 0) return i;
+                }
+                return WEIGHTS.length - 1;
+            }
 
             // ─── STATE ───
             let balance = 1000;
@@ -704,9 +628,6 @@
             let bonusBet = 10;
             let bonusTotalWin = 0;
 
-            // ─── SPEED ───
-            let spinSpeed = 3; // 1-5
-
             // DOM
             const slotGrid = document.getElementById('slotGrid');
             const plotCanvas = document.getElementById('plotCanvas');
@@ -719,6 +640,7 @@
             const payoutLabel = document.getElementById('payoutLabel');
             const historyBox = document.getElementById('historyBox');
             const spinBtn = document.getElementById('spinBtn');
+            const allinBtn = document.getElementById('allinBtn');
             const bonusBtn = document.getElementById('bonusBtn');
             const depositBtn = document.getElementById('depositBtn');
             const resetBtn = document.getElementById('resetBtn');
@@ -735,8 +657,6 @@
             const bonusMultiplierEl = document.getElementById('bonusMultiplier');
             const bonusSpinsLeftEl = document.getElementById('bonusSpinsLeft');
             const starfield = document.getElementById('starfield');
-            const speedSlider = document.getElementById('speedSlider');
-            const speedValue = document.getElementById('speedValue');
 
             // ─── STARFIELD ───
             function createStarfield() {
@@ -756,13 +676,7 @@
             }
             createStarfield();
 
-            // ─── SPEED CONTROL ───
-            speedSlider.addEventListener('input', () => {
-                spinSpeed = parseInt(speedSlider.value);
-                speedValue.textContent = spinSpeed;
-            });
-
-            // ─── EFFECTS ───
+            // ─── EFFECTS (без изменений) ───
 
             function createConfetti(count = 80, colorHue = null) {
                 const container = confettiContainer;
@@ -925,26 +839,6 @@
                 setTimeout(() => popup.remove(), 1200);
             }
 
-            // ─── БОЛЬШОЙ БОНУСНЫЙ ВЫИГРЫШ ───
-            function showBonusBigWin(amount) {
-                const container = document.createElement('div');
-                container.className = 'bonus-big-win';
-                container.innerHTML = `
-                    <div class="win-text">🎉 ${amount} 🎉</div>
-                    <div class="win-sub">🔥 БОНУСНЫЙ ВЫИГРЫШ! 🔥</div>
-                `;
-                document.body.appendChild(container);
-                // Эффекты
-                createConfetti(300, 45);
-                createParticles([{x: window.innerWidth/2, y: window.innerHeight/2}], 150, 45);
-                createLightning(10, 'rgba(255,215,0,');
-                createWaves(window.innerWidth/2, window.innerHeight/2, 6, 'rgba(255,215,0,');
-                createGoldRain(100, '#ffd700');
-                createFlash('#ffd700');
-                epicBackground();
-                setTimeout(() => container.remove(), 3500);
-            }
-
             function epicBackground() {
                 document.body.classList.add('epic-bg');
                 setTimeout(() => document.body.classList.remove('epic-bg'), 2000);
@@ -992,7 +886,7 @@
                 for (let r = 0; r < ROWS; r++) {
                     const row = [];
                     for (let c = 0; c < COLS; c++) {
-                        row.push(Math.floor(Math.random() * FUNCTIONS.length));
+                        row.push(weightedRandom());
                     }
                     gridSymbols.push(row);
                 }
@@ -1026,7 +920,7 @@
                 return { diff, Fa, Fb };
             }
 
-            // ─── ОТРИСОВКА ГРАФИКА ───
+            // ─── ОТРИСОВКА ГРАФИКА (исправленная) ───
             function drawPlotWithGrowth(funcs, a, b, diff, Fa, Fb) {
                 const c = plotCtx;
                 const w = plotCanvas.width;
@@ -1056,8 +950,11 @@
 
                 const labelStr = funcs.map(f => f.label).join(' + ');
 
-                const xMin = Math.max(0, a - 0.5);
-                const xMax = b + 0.5;
+                const minA = Math.min(a, b);
+                const maxB = Math.max(a, b);
+                const xMin = Math.max(0, minA - 0.5);
+                const xMax = maxB + 0.5;
+
                 const step = (xMax - xMin) / 300;
                 let yMin = Infinity, yMax = -Infinity;
                 const pts = [];
@@ -1078,6 +975,7 @@
                 const mapX = (x) => pad.left + ((x - xMin) / (xMax - xMin)) * plotW;
                 const mapY = (y) => pad.top + plotH - ((y - yMin) / (yMax - yMin)) * plotH;
 
+                // grid
                 c.strokeStyle = 'rgba(200,160,80,0.06)';
                 c.lineWidth = 0.5;
                 for (let i = 0; i <= 6; i++) {
@@ -1095,6 +993,7 @@
                     c.stroke();
                 }
 
+                // axes
                 c.strokeStyle = 'rgba(200,160,80,0.2)';
                 c.lineWidth = 1;
                 const y0 = mapY(0);
@@ -1112,6 +1011,7 @@
                     c.stroke();
                 }
 
+                // function curve
                 c.beginPath();
                 let first = true;
                 for (const p of pts) {
@@ -1127,6 +1027,7 @@
                 c.stroke();
                 c.shadowBlur = 0;
 
+                // highlight a and b points
                 const drawPoint = (x, color, label) => {
                     const px = mapX(x);
                     const py = mapY(F(x));
@@ -1146,6 +1047,7 @@
                 drawPoint(a, '#7ec8e3', 'a');
                 drawPoint(b, '#7ec8e3', 'b');
 
+                // draw line between a and b
                 const pa = { x: mapX(a), y: mapY(F(a)) };
                 const pb = { x: mapX(b), y: mapY(F(b)) };
                 c.beginPath();
@@ -1157,6 +1059,7 @@
                 c.stroke();
                 c.setLineDash([]);
 
+                // подпись diff и информация о перестановке
                 c.fillStyle = '#7ec8e3';
                 c.font = '16px "Times New Roman", serif';
                 c.textAlign = 'right';
@@ -1165,19 +1068,30 @@
                 c.fillText(diffStr, w - pad.right - 4, pad.top + 4);
 
                 c.fillStyle = '#f7e8b0';
+                c.font = '14px "Times New Roman", serif';
+                c.textAlign = 'left';
+                c.textBaseline = 'top';
+                c.fillText(`a = ${a.toFixed(2)}, b = ${b.toFixed(2)}`, pad.left + 4, pad.top + 28);
+
+                c.fillStyle = '#f7e8b0';
                 c.font = '20px "Times New Roman", serif';
                 c.textAlign = 'left';
                 c.textBaseline = 'top';
                 c.fillText(`F(x) = ${labelStr}`, pad.left + 4, pad.top + 4);
             }
 
-            // ─── СПИН ───
-            function performSpin() {
+            // ─── ОСНОВНОЙ СПИН с ограничением выигрыша 1.5x ───
+            function performSpin(betOverride = null) {
                 if (isSpinning || isBonus) return;
-                const betAmt = currentBet;
+                let betAmt = betOverride !== null ? betOverride : currentBet;
                 if (betAmt > balance) {
                     setMessage('❌ Недостаточно средств!', '#e06060');
                     return;
+                }
+                if (betOverride !== null) {
+                    currentBet = betAmt;
+                    betDisplay.textContent = currentBet;
+                    chipBtns.forEach(btn => btn.classList.remove('active'));
                 }
 
                 balance -= betAmt;
@@ -1185,11 +1099,11 @@
 
                 isSpinning = true;
                 spinBtn.disabled = true;
+                allinBtn.disabled = true;
                 bonusBtn.disabled = true;
                 setMessage('🎡 Вращение...', '#c8b898');
                 slotsContainer.classList.add('spin-active');
 
-                // Искры во время вращения
                 const sparkInterval = setInterval(() => {
                     createSparks(10, 30);
                 }, 300);
@@ -1197,7 +1111,7 @@
                 const cells = slotGrid.querySelectorAll('.cell');
                 let interval = setInterval(() => {
                     for (let i = 0; i < cells.length; i++) {
-                        const randIdx = Math.floor(Math.random() * FUNCTIONS.length);
+                        const randIdx = weightedRandom();
                         const label = FUNCTIONS[randIdx].label;
                         cells[i].textContent = label;
                         cells[i].className = 'cell';
@@ -1205,11 +1119,7 @@
                     }
                 }, 70);
 
-                // Скорость вращения влияет на длительность
-                const baseDuration = 1500;
-                const speedFactor = 1 + (5 - spinSpeed) * 0.2; // 1.8 при speed=1, 1.0 при speed=5
-                const duration = baseDuration * speedFactor + Math.random() * 500;
-
+                const duration = 1500 + Math.random() * 1000;
                 setTimeout(() => {
                     clearInterval(interval);
                     clearInterval(sparkInterval);
@@ -1219,7 +1129,7 @@
                     for (let r = 0; r < ROWS; r++) {
                         const row = [];
                         for (let c = 0; c < COLS; c++) {
-                            row.push(Math.floor(Math.random() * FUNCTIONS.length));
+                            row.push(weightedRandom());
                         }
                         finalGrid.push(row);
                     }
@@ -1234,8 +1144,16 @@
                         }
                     }
 
-                    const a = Math.random() * 3.5;
-                    const b = a + 0.5 + Math.random() * 2.5;
+                    let a = Math.random() * 3.5;
+                    let b = a + 0.5 + Math.random() * 2.5;
+
+                    // 50% шанс переставить a и b
+                    if (Math.random() < 0.5) {
+                        const temp = a;
+                        a = b;
+                        b = temp;
+                    }
+
                     const growth = computeGrowth(funcs, a, b);
                     const diff = growth.diff;
 
@@ -1245,7 +1163,9 @@
                     let resultColor = '#c8b898';
 
                     if (diff > 0) {
-                        const multiplier = Math.min(1 + diff, 10);
+                        // Рост — выигрыш, но не более 1.5× от ставки
+                        const rawMultiplier = 1 + diff;
+                        const multiplier = Math.min(rawMultiplier, 1.5);
                         winAmount = Math.round(betAmt * multiplier);
                         balance += winAmount;
                         isWin = true;
@@ -1259,12 +1179,12 @@
                         createGoldRain(40, '#7ae0a0');
                         showArrow('up');
                         createFlash('#7ae0a0');
-                        if (winAmount > betAmt * 3) {
+                        // Для больших выигрышей (если multiplier близок к 1.5) добавим эпик
+                        if (multiplier > 1.4) {
                             payoutLabel.classList.add('big-win');
                             setTimeout(() => payoutLabel.classList.remove('big-win'), 3000);
                             epicBackground();
                             createConfetti(200, 120);
-                            showMultiplierPopup(`+${winAmount}`, '#7ae0a0');
                         }
                     } else if (diff < 0) {
                         winAmount = 0;
@@ -1321,13 +1241,14 @@
 
                     isSpinning = false;
                     spinBtn.disabled = false;
+                    allinBtn.disabled = false;
                     bonusBtn.disabled = false;
                     slotsContainer.classList.remove('spin-active');
                     checkBalance();
                 }, duration);
             }
 
-            // ─── БОНУС (с большим выводом выигрыша) ───
+            // ─── БОНУС (без изменений) ───
             function checkBonusWin(grid) {
                 let hasFour = false;
                 for (let r = 0; r < ROWS; r++) {
@@ -1375,6 +1296,7 @@
                 bonusBet = currentBet;
 
                 spinBtn.disabled = true;
+                allinBtn.disabled = true;
                 bonusBtn.disabled = true;
                 depositBtn.style.display = 'none';
                 setMessage('🎰 Бонус активирован! Стартовый спин...', '#f7e8b0');
@@ -1393,7 +1315,7 @@
             function startBonusInitialSpin() {
                 const syms = [];
                 for (let i = 0; i < 3; i++) {
-                    syms.push(Math.floor(Math.random() * FUNCTIONS.length));
+                    syms.push(weightedRandom());
                 }
                 const labels = syms.map(idx => FUNCTIONS[idx].label);
                 setMessage(`🎲 Стартовые символы: ${labels.join(' · ')}`, '#f7e8b0');
@@ -1427,7 +1349,7 @@
                 for (let r = 0; r < ROWS; r++) {
                     const row = [];
                     for (let c = 0; c < COLS; c++) {
-                        row.push(Math.floor(Math.random() * FUNCTIONS.length));
+                        row.push(weightedRandom());
                     }
                     finalGrid.push(row);
                 }
@@ -1467,12 +1389,6 @@
                         createParticles([{x: window.innerWidth/2, y: window.innerHeight/2}], 100, 45);
                         createGoldRain(80, '#ffd700');
                         setMessage(`🔥 Сыгровка! X=${bonusMultiplier}, +${winAmount} 🪙`, '#ffd700');
-                        // БОЛЬШОЙ ВЫВОД ВЫИГРЫША
-                        if (winAmount > 100) {
-                            showBonusBigWin(`+${winAmount}`);
-                        } else {
-                            showMultiplierPopup(`+${winAmount}`, '#ffd700');
-                        }
                     }
                     bonusMultiplierEl.textContent = bonusMultiplier;
                     if (bonusMultiplier < 0) {
@@ -1482,6 +1398,7 @@
                         bonusMultiplierEl.classList.add('big');
                         setTimeout(() => bonusMultiplierEl.classList.remove('big'), 1000);
                     }
+                    showMultiplierPopup(`X = ${bonusMultiplier}`, bonusMultiplier < 0 ? '#e06060' : '#ffd700');
                 } else {
                     cellsAll.forEach(cell => cell.classList.add('lose-cell'));
                     setTimeout(() => {
@@ -1545,6 +1462,7 @@
                 bonusInfo.classList.remove('active');
                 isBonus = false;
                 spinBtn.disabled = false;
+                allinBtn.disabled = false;
                 bonusBtn.disabled = false;
                 checkBalance();
                 if (bonusTotalWin > 0) {
@@ -1556,9 +1474,6 @@
                     payoutLabel.textContent = `🏆 БОНУС +${bonusTotalWin}`;
                     payoutLabel.className = 'payout-info big-win';
                     setTimeout(() => payoutLabel.classList.remove('big-win'), 4000);
-                    if (bonusTotalWin > 100) {
-                        showBonusBigWin(`+${bonusTotalWin}`);
-                    }
                 } else if (bonusTotalWin < 0) {
                     payoutLabel.textContent = `💀 БОНУС -${Math.abs(bonusTotalWin)}`;
                     payoutLabel.className = 'payout-info lose';
@@ -1617,15 +1532,18 @@
                 if (balance <= 0) {
                     depositBtn.style.display = 'inline-block';
                     spinBtn.disabled = true;
+                    allinBtn.disabled = true;
                     bonusBtn.disabled = true;
                     setMessage('💰 Баланс нулевой. Пополните (Додеп)!', '#f7e8b0');
                 } else {
                     depositBtn.style.display = 'none';
                     spinBtn.disabled = false;
+                    allinBtn.disabled = false;
                     bonusBtn.disabled = false;
                 }
                 if (isBonus) {
                     spinBtn.disabled = true;
+                    allinBtn.disabled = true;
                     bonusBtn.disabled = true;
                 }
             }
@@ -1638,10 +1556,12 @@
                 if (balance > 0) {
                     depositBtn.style.display = 'none';
                     spinBtn.disabled = false;
+                    allinBtn.disabled = false;
                     bonusBtn.disabled = false;
                 }
                 if (isBonus) {
                     spinBtn.disabled = true;
+                    allinBtn.disabled = true;
                     bonusBtn.disabled = true;
                 }
             }
@@ -1661,6 +1581,7 @@
                 renderHistory();
                 setMessage('🔄 Игра сброшена. Крутите!', '#c8b898');
                 spinBtn.disabled = false;
+                allinBtn.disabled = false;
                 bonusBtn.disabled = false;
                 depositBtn.style.display = 'none';
                 bonusInfo.classList.remove('active');
@@ -1674,6 +1595,16 @@
                 sparkContainer.innerHTML = '';
                 waveContainer.innerHTML = '';
                 arrowContainer.innerHTML = '';
+            }
+
+            // ─── ALL IN ───
+            function allIn() {
+                if (isSpinning || isBonus) return;
+                if (balance <= 0) {
+                    setMessage('❌ Нечего ставить!', '#e06060');
+                    return;
+                }
+                performSpin(balance);
             }
 
             // ─── INIT ───
@@ -1692,7 +1623,8 @@
                     });
                 });
 
-                spinBtn.addEventListener('click', performSpin);
+                spinBtn.addEventListener('click', () => performSpin());
+                allinBtn.addEventListener('click', allIn);
                 bonusBtn.addEventListener('click', startBonus);
                 depositBtn.addEventListener('click', deposit);
                 resetBtn.addEventListener('click', resetGame);
