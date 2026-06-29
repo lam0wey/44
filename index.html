@@ -587,19 +587,24 @@
         (() => {
             'use strict';
 
-            // ─── СИМВОЛЫ И ВЕСА ───
+            // ─── РАСШИРЕННЫЙ НАБОР ФУНКЦИЙ (12 шт.) ───
             const FUNCTIONS = [
                 { label: 'x²', fn: (x) => x * x, tex: 'x^2', value: 2 },
-                { label: 'y²', fn: (x) => x * x, tex: 'y^2', value: 3 },
                 { label: 'x', fn: (x) => x, tex: 'x', value: 1 },
                 { label: 'cos', fn: (x) => Math.cos(x), tex: '\\cos x', value: 4 },
                 { label: 'sin', fn: (x) => Math.sin(x), tex: '\\sin x', value: 5 },
                 { label: 'ln', fn: (x) => Math.log(Math.max(0.001, x)), tex: '\\ln x', value: 6 },
+                { label: 'eˣ', fn: (x) => Math.exp(x), tex: 'e^x', value: 7 },
+                { label: '√x', fn: (x) => Math.sqrt(Math.max(0, x)), tex: '\\sqrt{x}', value: 8 },
+                { label: 'x³', fn: (x) => x * x * x, tex: 'x^3', value: 9 },
+                { label: '|x|', fn: (x) => Math.abs(x), tex: '|x|', value: 10 },
+                { label: '1/(x+1)', fn: (x) => 1 / (x + 1), tex: '\\frac{1}{x+1}', value: 11 },
                 { label: '-x', fn: (x) => -x, tex: '-x', value: -1 },
                 { label: '-y²', fn: (x) => -(x * x), tex: '-y^2', value: -3 },
             ];
 
-            const WEIGHTS = [1, 1, 1, 1, 1, 1, 3, 3];
+            // Веса: отрицательные (-x и -y²) имеют вес 8, остальные 1
+            const WEIGHTS = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 8, 8];
 
             function weightedRandom() {
                 const total = WEIGHTS.reduce((a, b) => a + b, 0);
@@ -1080,7 +1085,7 @@
                 c.fillText(`F(x) = ${labelStr}`, pad.left + 4, pad.top + 4);
             }
 
-            // ─── ОСНОВНОЙ СПИН с новой механикой выигрыша ───
+            // ─── ОСНОВНОЙ СПИН (с заданными вероятностями множителей) ───
             function performSpin(betOverride = null) {
                 if (isSpinning || isBonus) return;
                 let betAmt = betOverride !== null ? betOverride : currentBet;
@@ -1164,22 +1169,21 @@
                     let multiplier = 1;
 
                     if (diff > 0) {
-                        // ---- НОВАЯ МЕХАНИКА ВЫИГРЫША ----
-                        // редкий крупный выигрыш (5%) или частый мелкий (95%)
-                        const isRare = Math.random() < 0.05; // 5% на крупный
-                        const rawDiff = Math.min(diff, 150); // ограничим для обоих случаев
-
-                        if (isRare) {
-                            // Крупный выигрыш: множитель = 1 + rawDiff (до 151×)
-                            multiplier = 1 + rawDiff;
+                        // Вероятности множителей:
+                        // 1% - x3
+                        // 4% - x1.5
+                        // 8% - x2.0
+                        // 87% - 1.0..1.2
+                        const roll = Math.random();
+                        if (roll < 0.01) {
+                            multiplier = 3.0;
+                        } else if (roll < 0.05) {
+                            multiplier = 1.5;
+                        } else if (roll < 0.13) {
+                            multiplier = 2.0;
                         } else {
-                            // Мелкий выигрыш: множитель от 1 до 1 + diff * случайный коэффициент (0.03..0.07)
-                            const smallFactor = 0.03 + Math.random() * 0.04; // 0.03 .. 0.07
-                            multiplier = 1 + rawDiff * smallFactor;
+                            multiplier = 1.0 + Math.random() * 0.2;
                         }
-
-                        // Ограничим максимальный множитель 150 (редкий случай может дать 151)
-                        multiplier = Math.min(multiplier, 150);
 
                         winAmount = Math.round(betAmt * multiplier);
                         balance += winAmount;
@@ -1197,14 +1201,13 @@
                         showArrow('up');
                         createFlash('#7ae0a0');
 
-                        // Если крупный выигрыш (множитель > 10) — дополнительные эффекты
-                        if (multiplier > 10) {
+                        if (multiplier >= 2.0) {
                             payoutLabel.classList.add('big-win');
                             setTimeout(() => payoutLabel.classList.remove('big-win'), 3000);
                             epicBackground();
                             createConfetti(200, 120);
                             createLightning(8, 'rgba(255,215,0,');
-                            showMultiplierPopup(`x${Math.round(multiplier)}`, '#ffd700');
+                            showMultiplierPopup(`x${multiplier.toFixed(1)}`, '#ffd700');
                         }
                     } else if (diff < 0) {
                         winAmount = 0;
